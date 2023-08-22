@@ -29,12 +29,12 @@ async def test(i: discord.Interaction):
 
 
 @bot.tree.command(name="say", description="say en slash")
-async def say(ctx, *, texte: str):
+async def say(i: discord.Interaction, *, texte: str):
     if "@here" in texte or "@everyone" in texte:
         # Envoyer un message d'erreur à l'utilisateur
-        await ctx.send("Désolé, vous ne pouvez pas mentionner @here ou @everyone.", hidden=True)
+        await ctx.response.send_message("Désolé, vous ne pouvez pas mentionner @here ou @everyone.", ephemeral=True)
         return
-    await ctx.send(texte, hidden=True)
+    await i.response.send_message(texte, ephemeral=True)
 
 
 
@@ -149,6 +149,5 @@ with open("token.txt", "r")as f:
     token = f.readlines()
 token = token[0].replace("\n", "")
 bot.run(token)
-
 
 # python3 main.py
