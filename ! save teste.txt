@@ -1,0 +1,47 @@
+
+
+@bot.command()
+@cooldown(1, 10, BucketType.guild) # 1 utilisation toutes les 25 minutes pour tout le serveur
+async def pugs(ctx):
+    guild = bot.get_guild(1096891335203627130) # Remplacez GUILD_ID par l'ID de votre serveur
+    print(guild)
+    role = guild.get_role(1097816236622098533) # Remplacez ROLE_ID par l'ID du rôle à pinguer
+    print(role)
+    await role.edit(mentionable=True)
+    await ctx.send(f"{role.mention}, la commande a été exécutée !")
+    await asyncio.sleep(10) # Attendre 10 secondes avant de rendre le rôle non pingable
+    await role.edit(mentionable=False)
+
+@pugs.error
+async def pugs_error(ctx, error):
+    if isinstance(error, commands.CommandOnCooldown):
+        remaining_time = round(error.retry_after)
+        minutes = remaining_time // 60
+        seconds = remaining_time % 60
+        await ctx.send(f"Cette commande est en cours de rechargement. Veuillez attendre {minutes} minutes et {seconds} secondes.")
+    else:
+        await ctx.send("Une erreur s'est produite lors de l'exécution de la commande.")
+
+
+@bot.command()
+@commands.cooldown(1, 300, commands.BucketType.guild) # 1 utilisation toutes les 5 minutes pour tout le serveur
+async def pugs(ctx, minutes: int, role: discord.Role):
+    guild = ctx.guild
+    await role.edit(mentionable=True)
+    await ctx.send(f"{role.mention}, la commande a été exécutée !")
+    await asyncio.sleep(minutes * 60) # Attendre le temps spécifié en minutes
+    await role.edit(mentionable=False)
+
+@pugs.error
+async def pugs_error(ctx, error):
+    if isinstance(error, commands.BadArgument):
+        await ctx.send("Veuillez fournir une durée en minutes et mentionner un rôle.")
+    elif isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send("Veuillez fournir une durée en minutes et mentionner un rôle.")
+    elif isinstance(error, commands.CommandOnCooldown):
+        remaining_time = round(error.retry_after)
+        minutes = remaining_time // 60
+        seconds = remaining_time % 60
+        await ctx.send(f"Cette commande est en cours de rechargement. Veuillez attendre {minutes} minutes et {seconds} secondes.")
+    else:
+        await ctx.send("Une erreur s'est produite lors de l'exécution de la commande.")
