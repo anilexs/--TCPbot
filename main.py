@@ -1,3 +1,6 @@
+# pip install discord.py
+# python3 -m pip install deep-translator
+
 import discord
 import random
 from discord import app_commands
