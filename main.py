@@ -1,4 +1,4 @@
-# pip install discord.py
+# python3 -m pip install -U discord.py
 # python3 -m pip install deep-translator
 
 import discord
@@ -32,12 +32,12 @@ async def test(i: discord.Interaction):
 
 
 @bot.tree.command(name="say", description="say en slash")
-async def say(i: discord.Interaction, *, texte: str):
+async def say(ctx:  discord.Interaction, *, texte: str):
     if "@here" in texte or "@everyone" in texte:
         # Envoyer un message d'erreur à l'utilisateur
         await ctx.response.send_message("Désolé, vous ne pouvez pas mentionner @here ou @everyone.", ephemeral=True)
         return
-    await i.response.send_message(texte, ephemeral=True)
+    await ctx.response.send_message(texte, ephemeral=True)
 
 
 
